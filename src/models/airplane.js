@@ -14,12 +14,17 @@ module.exports = (sequelize, DataTypes) => {
     modelNumber: {
       type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: ''
+      validate: {
+        isAlphanumeric: true
+      }
     },
     capacity: { // Total seats available in the airplane.
       type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: 0
+      defaultValue: 0,
+      validate: {
+        max: 1000
+      }
     }
   },
     {
