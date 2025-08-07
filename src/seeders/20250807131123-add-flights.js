@@ -6,8 +6,8 @@ module.exports = {
       {
         flightNumber: 'FL101',
         airplaneId: 1, // must exist in Airplanes table
-        departureAirportId: '1', // string type as per your model
-        arrivalAirportId: '2',   // string type as per your model
+        departureAirportId: 'JFK', // string type as per your model
+        arrivalAirportId: 'LAX',   // string type as per your model
         departureTime: new Date(new Date().getTime() + 3600000), // 1 hour from now
         arrivalTime: new Date(new Date().getTime() + 10800000),  // 3 hours from now
         price: 4500,
