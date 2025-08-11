@@ -1,48 +1,143 @@
-This is a base node js project template, which anyone can use as it has been prepared, by keeping some of the most important code principles and project management recommendations. Feel free to change anything. 
+# Flight Booking Microservice Template
 
+This is a Node.js microservice template designed for scalable backend development. It follows best practices for project structure, error handling, logging, and database interaction. You can reuse this template for future microservices by simply copying and customizing as needed.
 
-`src` -> Inside the src folder all the actual source code regarding the project will reside, this will not include any kind of tests. (You might want to make separate tests folder)
+---
 
-Lets take a look inside the `src` folder
+## Table of Contents
 
- - `config` -> In this folder anything and everything regarding any configurations or setup of a library or module will be done. For example: setting up `dotenv` so that we can use the environment variables anywhere in a cleaner fashion, this is done in the `server-config.js`. One more example can be to setup you logging library that can help you to prepare meaningful logs, so configuration for this library should also be done here. 
+- [Flight Booking Microservice Template](#flight-booking-microservice-template)
+  - [Table of Contents](#table-of-contents)
+  - [Project Structure](#project-structure)
+  - [Setup Instructions](#setup-instructions)
+  - [Environment Variables](#environment-variables)
+  - [Sequelize Setup](#sequelize-setup)
+  - [CRUD Repository Pattern](#crud-repository-pattern)
+  - [Utils Overview](#utils-overview)
+  - [Checking the Info Controller](#checking-the-info-controller)
+  - [Logging](#logging)
+  - [Reusing This Template](#reusing-this-template)
 
- - `routes` -> In the routes folder, we register a route and the corresponding middleware and controllers to it. 
+---
 
- - `middlewares` -> they are just going to intercept the incoming requests where we can write our validators, authenticators etc. 
+## Project Structure
 
- - `controllers` -> they are kind of the last middlewares as post them you call you business layer to execute the budiness logic. In controllers we just receive the incoming requests and data and then pass it to the business layer, and once business layer returns an output, we structure the API response in controllers and send the output. 
+```
+src/
+  config/         # Configuration files (dotenv, logger, sequelize)
+  controllers/    # Route controllers
+  middlewares/    # Request middlewares (validators, authenticators)
+  models/         # Sequelize models
+  repositories/   # CRUD repository pattern for DB access
+  routes/         # API route definitions
+  services/       # Business logic layer
+  utils/          # Helpers, error classes, enums, responses
+  migrations/     # Sequelize migrations
+  seeders/        # Sequelize seeders
+logs/             # Winston log files
+.env              # Environment variables
+```
 
- - `repositories` -> this folder contains all the logic using which we interact the DB by writing queries, all the raw queries or ORM queries will go here.
+---
 
- - `services` -> contains the buiness logic and interacts with repositories for data from the database
+## Setup Instructions
 
- - `utils` -> contains helper methods, error classes etc.
-
-### Setup the project
-
- - Download this template from github and open it in your favourite text editor. 
- - Go inside the folder path and execute the following command:
-  ```
-  npm install
-  ```
- - In the root directory create a `.env` file and add the following env variables
+1. **Clone the repository** and install dependencies:
+    ```sh
+    npm install
     ```
-        PORT=<port number of your choice>
-    ```
-    ex: 
-    ```
-        PORT=3000
-    ```
- - go inside the `src` folder and execute the following command:
-    ```
-      npx sequelize init
-    ```
- - By executing the above command you will get migrations and seeders folder along with a config.json inside the config folder. 
- - If you're setting up your development environment, then write the username of your db, password of your db and in dialect mention whatever db you are using for ex: mysql, mariadb etc
- - If you're setting up test or prod environment, make sure you also replace the host with the hosted db url.
 
- - To run the server execute
- ```
- npm run dev
- ```
+2. **Add environment variables** in a `.env` file at the root:
+    ```
+    PORT=4000
+    ```
+
+3. **Initialize Sequelize** (inside `src`):
+    ```sh
+    npx sequelize init
+    ```
+    This creates `migrations/`, `seeders/`, and `config/config.json`.
+
+4. **Configure your database** in `src/config/config.json`:
+    - Set `username`, `password`, `database`, `host`, and `dialect` as per your DB.
+
+5. **Run the server**:
+    ```sh
+    npm run dev
+    ```
+
+---
+
+## Environment Variables
+
+- All environment variables are loaded using `dotenv` in [`src/config/server-config.js`](src/config/server-config.js).
+- Example `.env`:
+    ```
+    PORT=4000
+    ```
+
+---
+
+## Sequelize Setup
+
+- Sequelize is initialized in [`src/models/index.js`](src/models/index.js).
+- Database configuration is read from [`src/config/config.json`](src/config/config.json).
+- Models are auto-loaded from the `models/` directory.
+
+---
+
+## CRUD Repository Pattern
+
+- The [`CrudRepository`](src/repositories/crud-repository.js) class abstracts common DB operations:
+    - `create(data)`
+    - `get(id)`
+    - `getAll()`
+    - `update(id, data)`
+    - `destroy(id)`
+- Extend this class for your models to avoid repetitive code.
+
+---
+
+## Utils Overview
+
+- **Error Handling:** Custom error class [`AppError`](src/utils/errors/app-error.js).
+- **Common Responses:** Standardized success and error responses in [`success-response`](src/utils/common/success-response.js) and [`error-response`](src/utils/common/error-response.js).
+- **Enums:** Centralized enums like [`SEAT_TYPE`](src/utils/common/enums.js).
+- **Helpers:** Utility functions (e.g., [`validateDateTime`](src/utils/helpers/dataTime-helper.js)).
+
+---
+
+## Checking the Info Controller
+
+- The [`InfoController`](src/controllers/info-controller.js) provides a health check endpoint.
+- To test:
+    ```
+    GET /api/v1/info
+    ```
+    Response:
+    ```json
+    {
+      "sucess": true,
+      "message": "Api is up",
+      "error": {},
+      "data": {}
+    }
+    ```
+
+---
+
+## Logging
+
+- Winston logger is configured in [`src/config/logger-config.js`](src/config/logger-config.js).
+- Logs are written to `logs/combined.log` and the console.
+
+---
+
+## Reusing This Template
+
+- Copy the project structure and update models, controllers, and services as needed.
+- The utils, repository pattern, and configuration files are ready for extension.
+
+---
+
+Feel free to customize further for your
